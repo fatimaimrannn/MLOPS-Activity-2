@@ -1,0 +1,23 @@
+# Requirements for ML App
+
+# Core Libraries
+numpy==1.24.3
+pandas==2.0.3
+scikit-learn==1.2.2
+matplotlib==3.7.2
+seaborn==0.12.2
+
+# For deep learning (if needed)
+tensorflow==2.12.0
+# or if you're using PyTorch
+# torch==2.0.0
+# torchvision==0.15.0
+
+# For any web framework (if applicable)
+flask==2.3.3
+
+# For Jupyter notebooks (if needed)
+jupyter==1.0.0
+
+# Others as needed
+# Add any other libraries you are using in your project
