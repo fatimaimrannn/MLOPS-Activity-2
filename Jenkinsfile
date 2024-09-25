@@ -1,42 +1,38 @@
 pipeline {
     agent any
-    
     environment {
-        DOCKER_HUB_REPO = 'your_dockerhub_username/your_repo'
-        DOCKER_CREDENTIALS_ID = 'your-jenkins-docker-credentials-id'
+        GITHUB_CREDENTIALS = credentials('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')  // GitHub personal access token
+        DOCKER_HUB_CREDENTIALS = credentials('fatimaimran-dockerhub')  // Docker Hub credentials ID
     }
-    
     stages {
-        stage('Checkout') {
+        stage('Clone Repository') {
             steps {
-                // Checkout the code from the repository
-                git url: 'https://github.com/your_username/your_repo.git', branch: 'main'
+                // Cloning the GitHub repository using stored credentials
+                git url: 'https://github.com/fatimaimrannn/MLOPS-Activity-2.git',
+                    credentialsId: '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',
+                    branch: 'main'
             }
         }
         stage('Build Docker Image') {
             steps {
-                script {
-                    // Build the Docker image and tag it with the build number
-                    docker.build("${DOCKER_HUB_REPO}:${env.BUILD_NUMBER}")
-                }
+                powershell '''
+                docker build -t fatimaimran/ml-app:latest .
+                '''
             }
         }
-        stage('Push Docker Image to Docker Hub') {
+        stage('Push Docker Image') {
             steps {
-                script {
-                    // Login to Docker Hub and push the Docker image
-                    docker.withRegistry('', DOCKER_CREDENTIALS_ID) {
-                        docker.image("${DOCKER_HUB_REPO}:${env.BUILD_NUMBER}").push()
-                    }
-                }
+                powershell '''
+                echo $DOCKER_HUB_CREDENTIALS_PSW | docker login -u $DOCKER_HUB_CREDENTIALS_USR --password-stdin
+                docker push fatimaimran/ml-app:latest
+                '''
             }
         }
     }
-    
     post {
         always {
-            // Clean up workspace after build
-            cleanWs()
+            // Optional: Clean up Docker images after the build
+            powershell 'docker rmi fatimaimran/ml-app:latest'
         }
     }
 }
