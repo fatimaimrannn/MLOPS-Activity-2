@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         // Store GitHub and Docker Hub credentials in environment variables
-        GITHUB_CREDENTIALS = credentials('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') // GitHub personal access token
+        GITHUB_TOKEN = credentials('github-credentials') // GitHub personal access token
         DOCKER_HUB_CREDENTIALS = credentials('fatimaimran-dockerhub') // Docker Hub credentials ID
     }
     stages {
@@ -10,7 +10,7 @@ pipeline {
             steps {
                 // Cloning the GitHub repository using stored credentials
                 git url: 'https://github.com/fatimaimrannn/MLOPS-Activity-2.git',
-                    credentialsId: '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',
+                    credentialsId: 'github-credentials', // Use the correct credential ID
                     branch: 'main'
             }
         }
